@@ -28,8 +28,8 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   transition:
-    background-color 0.3 ease,
-    color 0.3 ease;
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .nav {
@@ -64,7 +64,7 @@ body {
 .nav .buttons button.active {
   color: var(--text-main);
   background-color: var(--border-color);
-  border-radius: 0.2rem;
+  border-radius: 0.4rem;
 }
 
 .nav-actions {
@@ -80,9 +80,11 @@ body {
 }
 
 .search-box input {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: solid 0.01rem;
+  border: 1px solid var(--border-color);
   width: 100%;
   max-width: 250px;
 }
@@ -93,7 +95,7 @@ body {
   border: none;
   cursor: pointer;
   background-color: var(--accent-color);
-  color: var(--text-main);
+  color: #ffffff;
 }
 
 .theme-button,
@@ -123,7 +125,9 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1.5rem;
-  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem;
 }
 
 .product-card {
@@ -133,12 +137,20 @@ body {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
   overflow: hidden;
   transition:
     transform 0.2s ease,
     border-color 0.2s ease;
   position: relative;
+}
+
+.product-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .product-image {
@@ -180,6 +192,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-top: 1rem;
+  margin-top: auto;
   gap: 0.5rem;
 }
 
@@ -199,4 +212,12 @@ body {
   font-size: 0.8rem;
   font-weight: 200;
   white-space: nowrap;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
 }
