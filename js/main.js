@@ -27,13 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const productsContainer = document.getElementById("products-container");
 const categoryButtons = document.querySelectorAll(".nav .buttons button");
+const searchInput = document.querySelector(".search-box input");
+const searchBtn = document.querySelector(".search-btn");
 
 //--------LISTAGEM DE PRODUTOS--------
 function renderProducts(productList) {
   productsContainer.innerHTML = "";
 
   if (productList.length === 0) {
-    productsContainer.innerHTML = "<p>Nenhum curso encontrado.</p>";
+    productsContainer.innerHTML =
+      '<p class="no-results">Nenhum curso encontrado.</p>';
     return;
   }
 
@@ -84,5 +87,42 @@ categoryButtons.forEach((button) => {
     const selectedCategory = button.dataset.category;
 
     filterAndRender(selectedCategory);
+  });
+});
+
+// --------BUSCA POR TEXTO--------
+
+let activeCategory = "Todos";
+
+function applyFilters() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      activeCategory === "Todos" || !activeCategory
+        ? true
+        : product.category === activeCategory;
+
+    const matchesSearch =
+      product.title.toLowerCase().includes(searchTerm) ||
+      product.instructor.toLowerCase().includes(searchTerm) ||
+      product.category.toLowerCase().includes(searchTerm);
+
+    return matchesCategory && matchesSearch;
+  });
+
+  renderProducts(filteredProducts);
+}
+
+searchInput.addEventListener("input", applyFilters);
+searchBtn.addEventListener("click", applyFilters);
+
+categoryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    categoryButtons.forEach((btn) => btn.classList.remove("active"));
+    button.classList.add("active");
+
+    activeCategory = button.dataset.category;
+    applyFilters();
   });
 });
