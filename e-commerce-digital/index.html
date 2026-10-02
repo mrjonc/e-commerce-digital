@@ -24,33 +24,38 @@
             width="100px"
             alt="Logo da Music Store"
           />
-          <button>Todos</button>
-          <button>Tech</button>
-          <button>Design</button>
-          <button>Marketing</button>
-          <button>Desenvolvimento Pessoal</button>
+          <button data-category="Todos">Todos</button>
+          <button data-category="Programação & Tecnologia">Tech</button>
+          <button data-category="Design & UX/UI">Design</button>
+          <button data-category="Marketing & Negócios">Marketing</button>
+          <button data-category="Produtividade & Soft Skills">
+            Desenvolvimento Pessoal
+          </button>
         </div>
 
-        <div class="search-box">
-          <input type="text" placeholder="Pesquisar" />
-          <button class="search-btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="nav-actions">
+          <div class="search-box">
+            <input type="text" placeholder="Pesquisar" />
+            <button class="search-btn">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+          <button id="cart" aria-label="Carrinho" class="cart">
+            <i class="fa-solid fa-cart-shopping"></i>
           </button>
           <button
             id="theme-toggle"
             aria-label="Alterar Tema"
             class="theme-button"
           >
-            <i class="fa-solid fa-moon"></i>
+            <i class="fa-solid fa-sun"></i>
           </button>
         </div>
       </nav>
     </header>
 
     <main>
-      <div class="cards">
-        <div class="card"></div>
-      </div>
+      <section id="products-container" class="products-grid"></section>
     </main>
   </body>
 </html>
