@@ -2,12 +2,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const themeToggleBtn = document.getElementById("theme-toggle");
   const themeIcon = themeToggleBtn.querySelector("i");
-
   const savedTheme = localStorage.getItem("theme");
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode");
-    themeIcon.classList.replace("fa-moon", "fa-sun");
+    themeIcon.classList.remove("fa-sun");
+    themeIcon.classList.add("fa-moon");
+  } else {
+    document.body.classList.remove("dark-mode");
+    themeIcon.classList.remove("fa-moon");
+    themeIcon.classList.add("fa-sun");
   }
 
   themeToggleBtn.addEventListener("click", () => {
@@ -25,10 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// --------REFERENCIAS DO DOM--------
 const productsContainer = document.getElementById("products-container");
 const categoryButtons = document.querySelectorAll(".nav .buttons button");
 const searchInput = document.querySelector(".search-box input");
 const searchBtn = document.querySelector(".search-btn");
+
+let activeCategory = "Todos";
 
 //--------LISTAGEM DE PRODUTOS--------
 function renderProducts(productList) {
@@ -92,8 +99,6 @@ categoryButtons.forEach((button) => {
 
 // --------BUSCA POR TEXTO--------
 
-let activeCategory = "Todos";
-
 function applyFilters() {
   const searchTerm = searchInput.value.trim().toLowerCase();
 
@@ -125,4 +130,18 @@ categoryButtons.forEach((button) => {
     activeCategory = button.dataset.category;
     applyFilters();
   });
+});
+
+// --------ADICIONAR AO CARRINHO--------
+productsContainer.addEventListener("click", (event) => {
+  if (event.target.classList.contains("btn-add-cart")) {
+    const productId = Number(event.target.dataset.id);
+    addToCart(productId);
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof products !== "undefined") {
+    renderProducts(products);
+  }
 });
