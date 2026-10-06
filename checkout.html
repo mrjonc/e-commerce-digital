@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="./js/theme-toggle.js" defer></script>
+    <script src="./js/products.js" defer></script>
+    <script src="./js/cart.js" defer></script>
+    <title>Checkout | Music Store</title>
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <div class="buttons">
+          <a href="./index.html">
+            <img
+              src="./assets/img/logo.jpg"
+              width="100px"
+              alt="Logo Music Store"
+            />
+          </a>
+        </div>
+        <div class="nav-actions">
+          <a href="./index.html" class="btn-voltar">
+            <i class="fa-solid fa-arrow-left"></i> Continuar Comprando
+          </a>
+          <button
+            id="theme-toggle"
+            aria-label="Alterar Tema"
+            class="theme-button"
+          >
+            <i class="fa-solid fa-sun"></i>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="checkout-container">
+      <h1>Resumo da Compra</h1>
+
+      <div class="checkout-content">
+        <section class="checkout-items">
+          <h2>Seus itens</h2>
+          <div id="checkout-list"></div>
+        </section>
+
+        <section class="checkout-summary">
+          <h2>Resumo do Pedido</h2>
+
+          <form id="checkout-form">
+            <div class="field">
+              <label for="nome">Nome <span class="required">*</span></label>
+              <input
+                id="nome"
+                type="text"
+                placeholder="Nome completo"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="email">E-mail <span class="required">*</span></label>
+              <input
+                id="email"
+                type="email"
+                placeholder="seuemail@email.com"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="payment">Forma de pagamento</label>
+              <select name="payment" id="payment">
+                <option value="boleto">Boleto</option>
+                <option value="credito">Cartão de crédito</option>
+                <option value="debito">Cartão de débito</option>
+                <option value="pix">Pix</option>
+              </select>
+            </div>
+
+            <div class="summary-details">
+              <p>Subtotal: <span id="summary-subtotal">R$ 0,00</span></p>
+              <p class="total-line">
+                Total: <strong id="summary-total">R$ 0,00</strong>
+              </p>
+            </div>
+            <button
+              id="btn-finish-order"
+              class="btn-checkout-finish"
+              type="submit"
+            >
+              Finalizar Compra
+            </button>
+          </form>
+
+          <button id="btn-clear-cart" class="btn-checkout-clear">
+            Esvaziar Carrinho
+          </button>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
