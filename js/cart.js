@@ -1,18 +1,25 @@
-// -------- GERENCIAMENTO DO CARRINHO (localStorage) --------
+// -------- GERENCIAMENTO DO CARRINHO --------
 
-// 1. Obtém os itens do localStorage ou inicializa um array vazio
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// 2. Salva o carrinho no localStorage e atualiza os elementos da interface
+// Salva o carrinho no localStorage e atualiza a interface
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartBadge();
-  renderCartModal();
+
+  if (document.getElementById("cart-items-list")) {
+    renderCartModal();
+  }
+
+  if (document.getElementById("checkout-list")) {
+    renderCheckout();
+  }
 }
 
-// 3. Adiciona um produto ao carrinho
+// Adiciona produto ao carrinho
 function addToCart(productId) {
-  // O array `products` precisa estar disponível no escopo global (definido em products.js)
+  if (typeof products === "undefined") return;
+
   const product = products.find((p) => p.id === productId);
   if (!product) return;
 
@@ -27,7 +34,7 @@ function addToCart(productId) {
   saveCart();
 }
 
-// 4. Altera a quantidade de um item (+1 ou -1)
+// Atualiza a quantidade de um item
 function updateQuantity(productId, amount) {
   const itemIndex = cart.findIndex((item) => item.id === productId);
 
@@ -42,19 +49,25 @@ function updateQuantity(productId, amount) {
   saveCart();
 }
 
-// 5. Remove um item completamente do carrinho
+// Remove item do carrinho
 function removeFromCart(productId) {
   cart = cart.filter((item) => item.id !== productId);
   saveCart();
 }
 
-// 6. Atualiza o contador de itens no ícone do carrinho no header
+// Limpa o carrinho
+function clearCart() {
+  cart = [];
+  saveCart();
+}
+
+// Atualiza a contagem no ícone do carrinho
 function updateCartBadge() {
   const cartBtn = document.getElementById("cart");
   if (!cartBtn) return;
 
   let badge = cartBtn.querySelector(".cart-badge");
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   if (!badge) {
     badge = document.createElement("span");
@@ -66,68 +79,41 @@ function updateCartBadge() {
   badge.style.display = totalItems > 0 ? "inline-block" : "none";
 }
 
-// 7. Renderiza o modal/drawer do carrinho (Gera a estrutura dinamicamente)
+// RENDERIZAÇÃO DO MODAL DO CARRINHO (INDEX.HTML)
 function renderCartModal() {
-  let modalContainer = document.getElementById("cart-modal");
-
-  // Cria a estrutura do modal caso ela ainda não exista no DOM
-  if (!modalContainer) {
-    modalContainer = document.createElement("div");
-    modalContainer.id = "cart-modal";
-    modalContainer.className = "cart-modal";
-    modalContainer.innerHTML = `
-      <div class="cart-modal-content">
-        <div class="cart-modal-header">
-          <h2>Seu Carrinho</h2>
-          <button id="close-cart" class="close-cart-btn">&times;</button>
-        </div>
-        <div id="cart-items-list" class="cart-items-list"></div>
-        <div class="cart-modal-footer">
-          <p>Total: <strong id="cart-total-price">R$ 0,00</strong></p>
-          <button id="checkout-btn" class="checkout-btn">Finalizar Compra</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modalContainer);
-
-    // Eventos do Modal
-    document
-      .getElementById("close-cart")
-      .addEventListener("click", toggleCartModal);
-
-    modalContainer.addEventListener("click", (e) => {
-      if (e.target === modalContainer) toggleCartModal();
-    });
-  }
-
   const itemsList = document.getElementById("cart-items-list");
   const totalPriceEl = document.getElementById("cart-total-price");
+
+  if (!itemsList) return;
 
   itemsList.innerHTML = "";
 
   if (cart.length === 0) {
     itemsList.innerHTML =
       '<p class="empty-cart-msg">Seu carrinho está vazio.</p>';
-    totalPriceEl.textContent = "R$ 0,00";
+    if (totalPriceEl) totalPriceEl.textContent = "R$ 0,00";
     return;
   }
 
   let total = 0;
 
   cart.forEach((item) => {
-    const subtotal = item.price * item.quantity;
+    const title = item.title || item.nome || "Curso";
+    const price = Number(item.price || item.preco || 0);
+    const quantity = item.quantity || 1;
+    const subtotal = price * quantity;
     total += subtotal;
 
     const itemEl = document.createElement("div");
     itemEl.className = "cart-item";
     itemEl.innerHTML = `
       <div class="cart-item-info">
-        <h4>${item.title}</h4>
-        <p>R$ ${item.price.toFixed(2).replace(".", ",")} cada</p>
+        <h4>${title}</h4>
+        <p>R$ ${price.toFixed(2).replace(".", ",")} cada</p>
       </div>
       <div class="cart-item-actions">
         <button onclick="updateQuantity(${item.id}, -1)">-</button>
-        <span>${item.quantity}</span>
+        <span>${quantity}</span>
         <button onclick="updateQuantity(${item.id}, 1)">+</button>
         <button class="remove-btn" onclick="removeFromCart(${item.id})">
           <i class="fa-solid fa-trash"></i>
@@ -137,10 +123,12 @@ function renderCartModal() {
     itemsList.appendChild(itemEl);
   });
 
-  totalPriceEl.textContent = `R$ ${total.toFixed(2).replace(".", ",")}`;
+  if (totalPriceEl) {
+    totalPriceEl.textContent = `R$ ${total.toFixed(2).replace(".", ",")}`;
+  }
 }
 
-// 8. Alterna a visibilidade do modal do carrinho
+// Alterna visibilidade do modal no index.html
 function toggleCartModal() {
   const modalContainer = document.getElementById("cart-modal");
   if (modalContainer) {
@@ -148,13 +136,131 @@ function toggleCartModal() {
   }
 }
 
-// -------- INICIALIZAÇÃO DO CARRINHO --------
-document.addEventListener("DOMContentLoaded", () => {
-  const cartBtn = document.getElementById("cart");
-  if (cartBtn) {
-    cartBtn.addEventListener("click", toggleCartModal);
+// RENDERIZAÇÃO DA PÁGINA DE CHECKOUT (CHECKOUT.HTML)
+function renderCheckout() {
+  const checkoutList = document.getElementById("checkout-list");
+  const subtotalEl = document.getElementById("summary-subtotal");
+  const totalEl = document.getElementById("summary-total");
+  const checkoutSumarySection = document.querySelector(".checkout-summary");
+
+  if (!checkoutList) return;
+
+  checkoutList.innerHTML = "";
+
+  if (cart.length === 0) {
+    checkoutList.innerHTML = `
+      <div class="empty-checkout">
+        <p>Seu carrinho está vazio.</p>
+        <a href="./index.html" class="btn-voltar-loja">Voltar para a loja</a>
+      </div>
+    `;
+    if (subtotalEl) subtotalEl.textContent = "R$ 0,00";
+    if (totalEl) totalEl.textContent = "R$ 0,00";
+
+    const finishBtn = document.getElementById("btn-finish-order");
+    const clearBtn = document.getElementById("btn-clear-cart");
+    if (finishBtn) finishBtn.disabled = true;
+    if (clearBtn) clearBtn.disabled = true;
+
+    return;
   }
 
+  let total = 0;
+
+  cart.forEach((item) => {
+    const title = item.title || item.nome || "Curso";
+    const price = Number(item.price || item.preco || 0);
+    const quantity = item.quantity || 1;
+    const itemSubtotal = price * quantity;
+    total += itemSubtotal;
+
+    const row = document.createElement("div");
+    row.className = "checkout-item";
+    row.innerHTML = `
+      <div class="checkout-item-info">
+        <h4>${title} (x${quantity})</h4>
+        <span class="price">R$ ${itemSubtotal.toFixed(2).replace(".", ",")}</span>
+      </div>
+    `;
+    checkoutList.appendChild(row);
+  });
+
+  const formattedTotal = `R$ ${total.toFixed(2).replace(".", ",")}`;
+  if (subtotalEl) subtotalEl.textContent = formattedTotal;
+  if (totalEl) totalEl.textContent = formattedTotal;
+
+  const finishBtn = document.getElementById("btn-finish-order");
+  const clearBtn = document.getElementById("btn-clear-cart");
+  if (finishBtn) finishBtn.disabled = false;
+  if (clearBtn) clearBtn.disabled = false;
+}
+
+// INICIALIZAÇÃO
+document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
+
+  // 1. Configurações do Modal no index.html
+  const cartIconBtn = document.getElementById("cart");
+  if (cartIconBtn) {
+    cartIconBtn.addEventListener("click", toggleCartModal);
+  }
+
+  const closeCartBtn = document.getElementById("close-cart");
+  if (closeCartBtn) {
+    closeCartBtn.addEventListener("click", toggleCartModal);
+  }
+
+  const checkoutBtn = document.getElementById("checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      if (cart.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+      }
+      window.location.href = "./checkout.html";
+    });
+  }
+
   renderCartModal();
+
+  // 2. Configurações da Página de Checkout (checkout.html)
+  if (document.getElementById("checkout-list")) {
+    renderCheckout();
+
+    // Botão de Esvaziar Carrinho
+    const btnClear = document.getElementById("btn-clear-cart");
+    if (btnClear) {
+      btnClear.addEventListener("click", (e) => {
+        e.preventDefault(); // Evita recarregar a página
+        if (cart.length === 0) return;
+
+        if (confirm("Tem certeza que deseja esvaziar o carrinho?")) {
+          clearCart();
+        }
+      });
+    }
+
+    // Submissão do Formulário de Checkout (Finalizar Compra)
+    const checkoutForm = document.getElementById("checkout-form");
+    if (checkoutForm) {
+      checkoutForm.addEventListener("submit", (e) => {
+        e.preventDefault(); // Impede o envio do form padrão do HTML
+
+        if (cart.length === 0) {
+          alert("Seu carrinho está vazio!");
+          return;
+        }
+
+        const name = document.getElementById("nome").value;
+        const email = document.getElementById("email").value;
+
+        alert(
+          `Obrigado pela compra, ${name}!\nUm e-mail de confirmação foi enviado para ${email}.`,
+        );
+
+        clearCart();
+        window.location.href = "./index.html"; // Redireciona para a home
+      });
+    }
+  }
 });

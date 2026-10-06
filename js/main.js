@@ -1,34 +1,3 @@
-// --------LIGHT/DARK MODE--------
-document.addEventListener("DOMContentLoaded", () => {
-  const themeToggleBtn = document.getElementById("theme-toggle");
-  const themeIcon = themeToggleBtn.querySelector("i");
-  const savedTheme = localStorage.getItem("theme");
-
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    themeIcon.classList.remove("fa-sun");
-    themeIcon.classList.add("fa-moon");
-  } else {
-    document.body.classList.remove("dark-mode");
-    themeIcon.classList.remove("fa-moon");
-    themeIcon.classList.add("fa-sun");
-  }
-
-  themeToggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-
-    const isDarkMode = document.body.classList.contains("dark-mode");
-
-    if (isDarkMode) {
-      themeIcon.classList.replace("fa-sun", "fa-moon");
-      localStorage.setItem("theme", "dark");
-    } else {
-      themeIcon.classList.replace("fa-moon", "fa-sun");
-      localStorage.setItem("theme", "light");
-    }
-  });
-});
-
 // --------REFERENCIAS DO DOM--------
 const productsContainer = document.getElementById("products-container");
 const categoryButtons = document.querySelectorAll(".nav .buttons button");
@@ -145,3 +114,29 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts(products);
   }
 });
+
+const menuToggle = document.getElementById("menu-toggle");
+const navMenu = document.getElementById("nav-menu");
+
+if (menuToggle && navMenu) {
+  const icon = menuToggle.querySelector("i");
+
+  const setOpen = (open) => {
+    navMenu.classList.toggle("open", open);
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+    icon.className = open ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+  };
+
+  menuToggle.addEventListener("click", () => {
+    setOpen(!navMenu.classList.contains("open"));
+  });
+
+  navMenu.addEventListener("click", (e) => {
+    if (e.target.closest("button")) setOpen(false);
+  });
+
+  window.matchMedia("(min-width: 769px)").addEventListener("change", (e) => {
+    if (e.matches) setOpen(false);
+  });
+}

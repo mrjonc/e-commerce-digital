@@ -3,27 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/responsive.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
+    <script src="./js/theme-toggle.js" defer></script>
+    <script src="./js/products.js" defer></script>
+    <script src="./js/main.js" defer></script>
+    <script src="./js/cart.js" defer></script>
 
-    <script src="/js/main.js" defer></script>
-    <script src="/js/cart.js" defer></script>
-    <script src="/js/products.js" defer></script>
     <title>Music Store</title>
   </head>
   <body>
     <header>
       <nav class="nav">
-        <div class="buttons">
-          <img
-            src="/assets/img/logo.jpg"
-            width="100px"
-            alt="Logo da Music Store"
-          />
+        <img
+          src="./assets/img/logo.jpg"
+          width="100px"
+          alt="Logo da Music Store"
+        />
+        <button
+          id="menu-toggle"
+          class="menu-toggle"
+          aria-label="Abrir menu"
+          aria-expanded="false"
+          aria-controls="menu"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="buttons" id="nav-menu">
           <button data-category="Todos">Todos</button>
           <button data-category="Programação & Tecnologia">Tech</button>
           <button data-category="Design & UX/UI">Design</button>
@@ -31,6 +41,8 @@
           <button data-category="Produtividade & Soft Skills">
             Desenvolvimento Pessoal
           </button>
+
+          <div class="nav-actions"></div>
         </div>
 
         <div class="nav-actions">
@@ -57,5 +69,23 @@
     <main>
       <section id="products-container" class="products-grid"></section>
     </main>
+
+    <div id="cart-modal" class="cart-modal">
+      <div class="cart-modal-content">
+        <div class="cart-modal-header">
+          <h2>Seu Carrinho</h2>
+          <button id="close-cart" aria-label="Fechar carrinho">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div id="cart-items-list"></div>
+
+        <div class="cart-modal-footer">
+          <p>Total: <strong id="cart-total-price">R$ 0,00</strong></p>
+          <button id="checkout-btn">Finalizar Compra</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
