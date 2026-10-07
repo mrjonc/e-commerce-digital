@@ -43,27 +43,9 @@ function renderProducts(productList) {
 // --------FILTRAGEM DE TIPOS DE CURSOS--------
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts(products);
-});
-
-function filterAndRender(categoryName) {
-  if (categoryName === "Todos" || !categoryName) {
-    renderProducts(products);
-    return;
-  }
-
-  const filteredProducts = products.filter(
-    (product) => product.category === categoryName,
-  );
-
-  renderProducts(filteredProducts);
-}
-
-categoryButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const selectedCategory = button.dataset.category;
-
-    filterAndRender(selectedCategory);
-  });
+  document
+    .querySelector('.nav .buttons button[data-category-"todos"]')
+    ?.classList.add("active");
 });
 
 // --------BUSCA POR TEXTO--------
@@ -106,12 +88,6 @@ productsContainer.addEventListener("click", (event) => {
   if (event.target.classList.contains("btn-add-cart")) {
     const productId = Number(event.target.dataset.id);
     addToCart(productId);
-  }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof products !== "undefined") {
-    renderProducts(products);
   }
 });
 

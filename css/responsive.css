@@ -37,6 +37,15 @@ img {
 }
 
 @media (max-width: 768px) {
+  #nav-menu {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .products-grid {
+    scroll-margin-top: 9rem;
+  }
+
   .footer-container {
     grid-template-columns: repeat(2, 1fr);
     padding: 2.25rem 1.25rem 1.5rem;

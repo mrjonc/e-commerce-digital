@@ -19,17 +19,20 @@
   <body>
     <header>
       <nav class="nav">
-        <img
-          src="./assets/img/logo.jpg"
-          width="100px"
-          alt="Logo da Music Store"
-        />
+        <a href="/">
+          <img
+            src="./assets/img/logo.jpg"
+            width="100px"
+            alt="Logo da EducaPlay"
+            href="/"
+          />
+        </a>
         <button
           id="menu-toggle"
           class="menu-toggle"
           aria-label="Abrir menu"
           aria-expanded="false"
-          aria-controls="menu"
+          aria-controls="nav-menu"
         >
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -41,8 +44,6 @@
           <button data-category="Produtividade & Soft Skills">
             Desenvolvimento Pessoal
           </button>
-
-          <div class="nav-actions"></div>
         </div>
 
         <div class="nav-actions">
@@ -64,26 +65,26 @@
           </button>
         </div>
       </nav>
-
-      <section class="hero">
-        <div class="hero-content">
-          <span class="hero-badge">Novos cursos toda semana</span>
-          <h1>
-            Aprenda no seu ritmo e
-            <span class="hero-highlight">evolua na carreira</span>
-          </h1>
-          <p>
-            Cursos de tecnologia, design, marketing e desenvolvimento pessoal
-            com instrutores experientes. Escolha, compre e comece hoje mesmo.
-          </p>
-          <div class="hero-actions">
-            <a href="#products-container" class="btn-hero btn-hero-primary">
-              Ver cursos <i class="fa-solid fa-arrow-down"></i>
-            </a>
-          </div>
-        </div>
-      </section>
     </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <span class="hero-badge">Novos cursos toda semana</span>
+        <h1>
+          Aprenda no seu ritmo e
+          <span class="hero-highlight">evolua na carreira</span>
+        </h1>
+        <p>
+          Cursos de tecnologia, design, marketing e desenvolvimento pessoal com
+          instrutores experientes. Escolha, compre e comece hoje mesmo.
+        </p>
+        <div class="hero-actions">
+          <a href="#products-container" class="btn-hero btn-hero-primary">
+            Ver cursos <i class="fa-solid fa-arrow-down"></i>
+          </a>
+        </div>
+      </div>
+    </section>
 
     <main>
       <section id="products-container" class="products-grid"></section>
@@ -168,7 +169,7 @@
 
       <div class="footer-bottom">
         <div class="footer-bottom-content">
-          <p>&copy; 2026 Music Store. Todos os direitos reservados.</p>
+          <p>&copy; EducaPlay. Todos os direitos reservados.</p>
           <div class="footer-payments" aria-label="Formas de pagamento">
             <i class="fa-brands fa-pix" title="Pix"></i>
             <i class="fa-brands fa-cc-visa" title="Visa"></i>
